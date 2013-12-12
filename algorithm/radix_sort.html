@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>Radix Sort - Simulation</title>
+        <script type="text/javascript" src="jquery-1.10.2.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.4.0/fabric.min.js" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+            function getDigit(item, digit) {
+                var str = Math.round(item).toString();
+                if (digit >= str.length) return 0;
+                return str.charAt(str.length - digit - 1);
+            }
+            function pass(a, digit) {
+                var buckets = {};
+                // initialize buckets
+                for (var i = 0; i < 10; i++)
+                    buckets[i] = [];
+                // put each item into the right bucket for this pass
+                for (var i = 0; i < a.length; i++) {
+                    var bucketNo = getDigit(a[i], digit);
+                    buckets[bucketNo].push(a[i]);
+                }
+                // convert buckets to array (keep order)
+                var newA = [];
+                for (var i = 0; i < 10; i++) {
+                    while (buckets[i].length > 0) {
+                        var item = buckets[i].shift(); 
+                        newA.push(item);
+                    }
+                }
+                return newA;
+            }
+            function radixSort(a) {
+                // Find the largest length among items
+                var maxLength = 0;
+                for (var i = 0; i < a.length; i++)
+                    maxLength = a[i].length > maxLength ? a[i].length : maxLength;
+                // Then we pass the array through maxLength rounds
+                for (var i = 0; i < maxLength; i++) {
+                    a = pass(a, i);
+                    console.log("Step " + i + ": " + a);
+                }
+                return a;
+            }
+        </script>
+    </head>
+    <body>
+        <textarea name="sort_input" id="sortInput" rows="8" cols="40">100 5 123 15 51 2 312 1 512 5121 35 16 89198 5918918 98 29158 198512</textarea>
+        <input id="sortRun" type="button" value="Sort it!">
+        <textarea name="sort_output" id="sortOutput" rows="8" cols="40"></textarea>
+    </body>
+</html>
